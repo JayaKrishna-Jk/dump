@@ -1,0 +1,69 @@
+public class BatchPolicingHtmlGenerator {
+
+    public static String generateHtml(BatchPolicingSummary summary, String dateTime) {
+        StringBuilder htmlBuilder = new StringBuilder();
+
+        // HTML Structure and CSS Styling
+        htmlBuilder.append("<!DOCTYPE html>");
+        htmlBuilder.append("<html lang='en'>");
+        htmlBuilder.append("<head>");
+        htmlBuilder.append("<meta charset='UTF-8'>");
+        htmlBuilder.append("<title>Batch Policing Consolidated Exception Report</title>");
+        htmlBuilder.append("<style>");
+        htmlBuilder.append("table { width: 90%; border-collapse: collapse; margin: 20px auto; font-family: Arial, sans-serif; }");
+        htmlBuilder.append("th, td { border: 1px solid #888; padding: 8px; text-align: center; }");
+        htmlBuilder.append("th { background-color: #d3d3d3; }");
+        htmlBuilder.append(".header { background-color: #4f6228; color: white; font-weight: bold; }");
+        htmlBuilder.append(".error { color: red; font-weight: bold; }");
+        htmlBuilder.append(".warning { color: orange; font-weight: bold; }");
+        htmlBuilder.append(".no-issue { color: green; font-weight: bold; }");
+        htmlBuilder.append(".centered { text-align: center; font-weight: bold; font-size: 20px; background-color: #4f6228; color: white; }");
+        htmlBuilder.append(".legend th, .legend td { text-align: center; font-weight: bold; }");
+        htmlBuilder.append(".footer { background-color: #4f6228; color: white; font-weight: bold; }");
+        htmlBuilder.append("</style>");
+        htmlBuilder.append("</head>");
+        htmlBuilder.append("<body>");
+
+        // Report Heading
+        htmlBuilder.append("<table>");
+        htmlBuilder.append("<tr><td class='centered' colspan='4'>Batch Policing Consolidated Exception Report as of ")
+                .append(dateTime).append("</td></tr>");
+
+        // Table Header
+        htmlBuilder.append("<tr class='header'>");
+        htmlBuilder.append("<th>Batch Police Report</th>");
+        htmlBuilder.append("<th>File Name</th>");
+        htmlBuilder.append("<th>Exception</th>");
+        htmlBuilder.append("<th>File Description</th>");
+        htmlBuilder.append("</tr>");
+
+        // Populating Table Data
+        for (BatchPolicingReport message : summary.getMessages()) {
+            htmlBuilder.append("<tr>");
+            htmlBuilder.append("<td>").append(message.getData()).append("</td>");
+            htmlBuilder.append("<td>").append("<a href='#'>").append(message.getFileName()).append("</a>").append("</td>");
+            
+            // Determine Exception Type
+            String exceptionClass = "no-issue";
+            String exceptionSymbol = "✔️";
+            if (message.getMsgType().equals(MessageType.ERROR)) {
+                exceptionClass = "error";
+                exceptionSymbol = "❌";
+            } else if (message.getMsgType().equals(MessageType.WARNING)) {
+                exceptionClass = "warning";
+                exceptionSymbol = "⚠️";
+            }
+            
+            htmlBuilder.append("<td class='").append(exceptionClass).append("'>").append(exceptionSymbol).append("</td>");
+            htmlBuilder.append("<td>").append(message.getDescription()).append("</td>");
+            htmlBuilder.append("</tr>");
+        }
+
+        // Footer and Closing Tags
+        htmlBuilder.append("</table>");
+        htmlBuilder.append("</body>");
+        htmlBuilder.append("</html>");
+
+        return htmlBuilder.toString();
+    }
+}
