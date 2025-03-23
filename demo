@@ -67,3 +67,57 @@ public class BatchPolicingHtmlGenerator {
         return htmlBuilder.toString();
     }
 }
+
+
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Batch Policing Consolidated Exception Report</title>
+    <style>
+        table { width: 90%; border-collapse: collapse; margin: 20px auto; font-family: Arial, sans-serif; }
+        th, td { border: 1px solid #888; padding: 8px; text-align: center; }
+        th { background-color: #d3d3d3; }
+        .header { background-color: #4f6228; color: white; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        .warning { color: orange; font-weight: bold; }
+        .no-issue { color: green; font-weight: bold; }
+        .centered { text-align: center; font-weight: bold; font-size: 20px; background-color: #4f6228; color: white; }
+        .legend th, .legend td { text-align: center; font-weight: bold; }
+        .footer { background-color: #4f6228; color: white; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td class='centered' colspan='4'>Batch Policing Consolidated Exception Report as of [DateTime]</td>
+        </tr>
+        <tr class='header'>
+            <th>Batch Police Report</th>
+            <th>File Name</th>
+            <th>Exception</th>
+            <th>File Description</th>
+        </tr>
+        <!-- Example of dynamically generated rows -->
+        <tr>
+            <td>Report 1</td>
+            <td><a href='#'>accrual1.txt</a></td>
+            <td class='error'>❌</td>
+            <td>Missing data fields</td>
+        </tr>
+        <tr>
+            <td>Report 2</td>
+            <td><a href='#'>loan_details.txt</a></td>
+            <td class='warning'>⚠️</td>
+            <td>Inconsistent record count</td>
+        </tr>
+        <tr>
+            <td>Report 3</td>
+            <td><a href='#'>payment_report.txt</a></td>
+            <td class='no-issue'>✔️</td>
+            <td>No issues found</td>
+        </tr>
+    </table>
+</body>
+</html>
