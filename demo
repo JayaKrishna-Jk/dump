@@ -121,3 +121,70 @@ public class BatchPolicingHtmlGenerator {
     </table>
 </body>
 </html>
+
+
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Batch Policing Consolidated Exception Report</title>
+    <style>
+        table { width: 90%; border-collapse: collapse; margin: 20px auto; font-family: Arial, sans-serif; }
+        th, td { border: 1px solid #888; padding: 8px; text-align: center; }
+        th { background-color: #d3d3d3; }
+        .header { background-color: #4f6228; color: white; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        .warning { color: orange; font-weight: bold; }
+        .no-issue { color: green; font-weight: bold; }
+        .centered { text-align: center; font-weight: bold; font-size: 20px; background-color: #4f6228; color: white; }
+        .legend th, .legend td { text-align: center; font-weight: bold; }
+        .footer { background-color: #4f6228; color: white; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td class='centered' colspan='4'>Batch Policing Consolidated Exception Report as of 2024-03-23 10:30:00</td>
+        </tr>
+        <tr class='header'>
+            <th>Batch Police Report</th>
+            <th>File Name</th>
+            <th>Exception</th>
+            <th>File Description</th>
+        </tr>
+        
+        <!-- Hardcoded Example Rows -->
+        <tr>
+            <td>Loan Data Validation</td>
+            <td><a href='#'>loan_validation.txt</a></td>
+            <td class='error'>❌</td>
+            <td>Missing loan records</td>
+        </tr>
+        <tr>
+            <td>Payment Accuracy Check</td>
+            <td><a href='#'>payment_report.txt</a></td>
+            <td class='warning'>⚠️</td>
+            <td>Minor discrepancies in payment amounts</td>
+        </tr>
+        <tr>
+            <td>Interest Rate Report</td>
+            <td><a href='#'>interest_report.txt</a></td>
+            <td class='no-issue'>✔️</td>
+            <td>All rates are consistent</td>
+        </tr>
+        <tr>
+            <td>Data Completeness Check</td>
+            <td><a href='#'>completeness_report.txt</a></td>
+            <td class='error'>❌</td>
+            <td>Incomplete data for batch ID 1023</td>
+        </tr>
+        <tr>
+            <td>Accruals Reconciliation</td>
+            <td><a href='#'>accruals.txt</a></td>
+            <td class='no-issue'>✔️</td>
+            <td>Reconciliation successful</td>
+        </tr>
+    </table>
+</body>
+</html>
