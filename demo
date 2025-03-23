@@ -1,3 +1,65 @@
+// Populating Table Data
+for (BatchPolicingReport message : summary.getMessages()) {
+    MessageType msgType = message.getMsgType();
+    String messageData = message.getData();
+    htmlBuilder.append("<tr>");
+
+    if (!msgType.equals(MessageType.SUMMARY)) {
+        // Use the new method to set symbol and description
+        setSymbolAndDescription(htmlBuilder, msgType, messageData, inputFilesDict);
+    } else {
+        // Handle summary type separately
+        htmlBuilder.append("<td colspan='4'>").append(messageData).append("</td>");
+    }
+
+    htmlBuilder.append("</tr>");
+}
+
+
+
+private static void setSymbolAndDescription(StringBuilder htmlBuilder, MessageType msgType, String messageData, Dictionary<String, String> inputFilesDict) {
+    String symbol = msgType.getSymbol();
+    String exceptionClass = "no-issue";
+    if (msgType.equals(MessageType.ERROR)) {
+        exceptionClass = "error";
+    } else if (msgType.equals(MessageType.WARNING)) {
+        exceptionClass = "warning";
+    }
+
+    // Extracting report name and description
+    String baseName = messageData.substring(1, messageData.lastIndexOf(BatchPolicingConstants.STR_PERIOD) - 1);
+    String extension = messageData.substring(messageData.lastIndexOf(BatchPolicingConstants.STR_PERIOD));
+    String description = inputFilesDict.get(baseName + extension);
+
+    // Fallback if description is missing or not found
+    String reportName = "Unknown Report";
+    String fileDescription = "No Description Available";
+
+    if (description != null && !description.isEmpty()) {
+        String[] parts = description.split(LIQConstants.TILDE);
+        if (parts.length >= 2) {
+            reportName = parts[0];
+            fileDescription = parts[1];
+        } else if (parts.length == 1) {
+            reportName = parts[0];
+        }
+    }
+
+    // Setting Report Name
+    htmlBuilder.append("<td>").append(reportName).append("</td>");
+
+    // Setting File Name as a Hyperlink
+    htmlBuilder.append("<td>").append("<a href='#'>").append(messageData.substring(1)).append("</a>").append("</td>");
+
+    // Setting Symbol and Description
+    htmlBuilder.append("<td class='").append(exceptionClass).append("'>").append(symbol).append("</td>");
+    htmlBuilder.append("<td>").append(fileDescription).append("</td>");
+}
+
+
+
+
+
 public class BatchPolicingHtmlGenerator {
 
     public static String generateHtml(BatchPolicingSummary summaryReport, int totReportsCount, String dateTime, BatchPolicingUtils utils) {
