@@ -1,3 +1,44 @@
+
+try {
+    BatchPolicingReader reader = new BatchPolicingReader();
+    reader.readFiles(impl, folderPath, matchedFiles, summary, errorKeywords, warnKeywords);
+    List<BatchPolicingReport> reports = reader.getReports();
+
+    String dateTime = LIQUtility.getCurrentDate(BatchPolicingConstants.GENERIC_DT_FORMAT);
+    String htmlContent = BatchPolicingHtmlGenerator.generateHtml(summary, reports.size(), dateTime, utils);
+
+    // Save the HTML content to a specified file path
+    String filePath = "C:\\Users\\YourUsername\\Documents\\BatchPolicingSummary.html";
+    BatchPolicingHtmlSaver.saveHtmlToFile(htmlContent, filePath, impl);
+
+    XSSFWorkbook workbook = BatchPolicingWriter.writeData(impl, outputPath, reports, saveReport, inputFilesDict, utils);
+
+    BatchPolicingMailService mailServiceObj = new BatchPolicingMailService();
+    mailServiceObj.sendMail(impl, workbook, utils, summary, reports, inputFilesDict);
+    impl.endWithReturnCode(FileUtilConstants.FULL_SUCCESS);
+
+} catch (Exception e) {
+    impl.logError("Exception occurred while processing: " + e.getMessage());
+}
+
+
+
+public class BatchPolicingHtmlSaver {
+
+    public static void saveHtmlToFile(String htmlContent, String fileName, BatchPolicingLogger impl) {
+        try (PrintWriter writer = new PrintWriter(fileName, "UTF-8")) {
+            writer.println(htmlContent);
+            impl.logInfo("HTML content successfully saved to: " + fileName);
+        } catch (IOException e) {
+            impl.logError("Error while saving HTML content: " + e.getMessage());
+        }
+    }
+}
+
+
+
+
+
 import org.apache.poi.xwpf.usermodel.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
