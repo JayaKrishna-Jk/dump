@@ -1,3 +1,44 @@
+import org.apache.poi.xwpf.usermodel.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Dictionary;
+
+public class BatchPolicingHtmlToDocGenerator {
+
+    public static void generateHtmlDocument(BatchPolicingSummary summaryReport, int totReportsCount, 
+                                            String dateTime, BatchPolicingUtils utils, Dictionary<String, String> inputFilesDict) {
+        try {
+            // Generate HTML content using the existing method
+            String htmlContent = BatchPolicingHtmlGenerator.generateHtml(summaryReport, totReportsCount, dateTime, utils);
+
+            // Create a new Word document
+            XWPFDocument document = new XWPFDocument();
+            XWPFParagraph paragraph = document.createParagraph();
+            XWPFRun run = paragraph.createRun();
+            run.setText(htmlContent);
+            run.setFontFamily("Courier New");
+            run.setFontSize(10);
+
+            // Save the Word document
+            String filePath = "BatchPolicingSummary.docx";
+            try (FileOutputStream out = new FileOutputStream(filePath)) {
+                document.write(out);
+                out.close();
+                System.out.println("HTML content successfully written to: " + filePath);
+            }
+
+            document.close();
+        } catch (IOException e) {
+            System.err.println("Error while writing HTML to Word document: " + e.getMessage());
+        }
+    }
+}
+
+
+
+
+
 // Populating Table Data
 for (BatchPolicingReport message : summary.getMessages()) {
     MessageType msgType = message.getMsgType();
