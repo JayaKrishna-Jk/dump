@@ -1,4 +1,123 @@
 
+### **Understanding Azure VM Sizing and Series**  
+
+When creating a Virtual Machine (VM) in Azure, selecting the right size is crucial for balancing **performance, cost, and scalability**. The VM **size** determines how much **CPU, RAM, storage, and network bandwidth** your VM will have.  
+
+Azure provides **multiple VM series**, each optimized for different workloads. The `E4ds_v4` VM size used in **Prod** is from the **E-series**, which is optimized for memory-intensive applications. For **Pre-Dev**, we can choose a different series based on requirements.
+
+---
+
+## **1. VM Size Selection in Azure Portal: Columns and Their Meaning**  
+
+| Column Name      | Description |
+|-----------------|-------------|
+| **SKU (Stock Keeping Unit)** | The unique identifier for the VM size, e.g., `E4ds_v4`. |
+| **vCPU (Virtual CPU)** | The number of virtual processors assigned to the VM. |
+| **RAM (Memory)** | The amount of memory (in GB) available in the VM. |
+| **Data Disks** | The maximum number of data disks the VM supports. |
+| **Max IOPS (Input/Output Operations per Second)** | Maximum disk performance capability for high-speed storage. |
+| **Temporary Storage (SSD)** | The local SSD storage for temporary files (gets wiped on VM restart). |
+| **Accelerated Networking** | Improves networking performance and reduces CPU usage. |
+| **Max NICs (Network Interfaces)** | Maximum number of network interfaces that can be attached to the VM. |
+
+---
+
+## **2. Azure VM Series and Use Cases**  
+
+### **A-Series (Entry-Level)**
+- **Use Case:** Small applications, development, and testing.
+- **Example:** `A2_v2`, `A4_v2`
+- **Alternative for Pre-Dev?** ✅ Yes, if low-cost, lightweight VMs are needed.
+
+### **B-Series (Burstable)**
+- **Use Case:** Workloads with low CPU usage but occasional bursts (e.g., web servers, microservices).
+- **Example:** `B2s`, `B4ms`
+- **Alternative for Pre-Dev?** ✅ Yes, for cost-efficient VMs with occasional high-performance needs.
+
+### **D-Series (General Purpose)**
+- **Use Case:** Balanced CPU, memory, and disk for general workloads (web apps, databases).
+- **Example:** `D4ds_v4`, `D8s_v5`
+- **Alternative for Pre-Dev?** ✅ Yes, if a balance of CPU and memory is required.
+
+### **E-Series (Memory Optimized)**
+- **Use Case:** Memory-intensive applications like **SAP, SQL databases, in-memory caching**.
+- **Example:** `E4ds_v4`, `E8s_v5`
+- **Alternative for Pre-Dev?** ❌ Probably **not needed** unless working with memory-heavy workloads.
+
+### **F-Series (Compute Optimized)**
+- **Use Case:** High CPU-to-memory ratio for batch processing, game servers.
+- **Example:** `F4s_v2`, `F16s_v2`
+- **Alternative for Pre-Dev?** ❌ No, unless you are running CPU-heavy computations.
+
+### **M-Series (Large Memory)**
+- **Use Case:** Extremely memory-intensive applications like **SAP HANA**.
+- **Example:** `M16ms`, `M32ms`
+- **Alternative for Pre-Dev?** ❌ No, since it's expensive and used for enterprise databases.
+
+### **L-Series (Storage Optimized)**
+- **Use Case:** Workloads needing high disk throughput, like **big data, NoSQL databases**.
+- **Example:** `L8s_v2`, `L16s_v3`
+- **Alternative for Pre-Dev?** ❌ No, unless working with high-speed data processing.
+
+### **N-Series (GPU Optimized)**
+- **Use Case:** Machine Learning (ML), AI, and **video rendering**.
+- **Example:** `NC6s_v3`, `ND40s_v4`
+- **Alternative for Pre-Dev?** ❌ No, unless GPU is needed.
+
+---
+
+## **3. What Can You Use in Pre-Dev Instead of E-Series?**  
+
+Since **E4ds_v4** is memory-optimized and used in **Prod**, for **Pre-Dev**, we should pick a cheaper alternative:
+
+| **Prod VM Size (E-Series)** | **Possible Pre-Dev Alternative** | **Reason** |
+|----------------|----------------------|------------|
+| `E4ds_v4` | `D4ds_v4` | General purpose, balanced CPU & memory |
+| `E8s_v5` | `B4ms` | Lower-cost, good for testing |
+| `E16s_v5` | `D8s_v5` | Good alternative with lower cost |
+
+---
+
+## **4. Key Considerations for Choosing a Pre-Dev VM Size**
+1. **What are you testing?**  
+   - If it's a **web app**, use `D-Series` or `B-Series`.  
+   - If you need **bursting capability**, go for `B-Series`.  
+   - If it's a **database test**, `D-Series` is better.  
+
+2. **Cost vs. Performance**  
+   - `E-Series` is expensive but needed for **high-memory** workloads.  
+   - `D-Series` is a **cost-effective alternative** for most dev/test needs.  
+
+3. **Future Scalability**  
+   - Use **Autoscaling** if needed.  
+   - Choose **reserved instances** in Prod for cost savings.  
+
+---
+
+## **5. Summary: What Should You Ask the Team?**
+1. **Confirm if Pre-Dev needs a different series**  
+   - Ask: *"Do we need high-memory (E-Series) for Pre-Dev, or can we use D-Series or B-Series?"*
+
+2. **Clarify Workload Needs**  
+   - Ask: *"What type of workloads will we run in Pre-Dev (web app, database, batch jobs)?"*  
+
+3. **Performance vs. Cost**  
+   - Ask: *"Should we prioritize cost savings in Pre-Dev, or mirror Prod specs?"*  
+
+4. **Storage and Network Considerations**  
+   - Ask: *"What disk types and network bandwidth are required?"*  
+
+---
+
+### **Next Steps**
+- If you're setting up **Pre-Dev**, I recommend starting with a **D-Series or B-Series VM**.
+- Once requirements are clear, we can fine-tune based on workload needs.
+
+Would you like me to help compare specific sizes based on your workload?
+
+
+
+
 try {
     BatchPolicingReader reader = new BatchPolicingReader();
     reader.readFiles(impl, folderPath, matchedFiles, summary, errorKeywords, warnKeywords);
