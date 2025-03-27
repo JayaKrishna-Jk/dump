@@ -1,5 +1,106 @@
 public class BatchPolicingHtmlGenerator {
 
+    public static String generateHtml(
+        BatchPolicingReport summaryReport,
+        List<BatchPolicingReport> reports,
+        String dateTime,
+        BatchPolicingUtils utils,
+        Dictionary<String, String> inputFilesDict
+    ) {
+        StringBuilder htmlBuilder = new StringBuilder();
+
+        // HTML Structure and CSS Styling
+        htmlBuilder.append("<!DOCTYPE html><html lang='en'><head>");
+        htmlBuilder.append("<meta charset='UTF-8'>");
+        htmlBuilder.append("<title>").append(BatchPolicingConstants.SUMMARY_HEADING_PART1)
+                   .append(" Exception Report</title>");
+        htmlBuilder.append("<style>");
+        htmlBuilder.append("table { width: 90%; border-collapse: collapse; margin: 20px auto; font-family: Arial, sans-serif; }");
+        htmlBuilder.append("th, td { border: 1px solid #888; padding: 8px; text-align: center; }");
+        htmlBuilder.append("th { background-color: #BFBFBF; white-space: nowrap; }");  // Auto-adjust header width
+        htmlBuilder.append("</style></head><body>");
+
+        String fullHeader = BatchPolicingConstants.SUMMARY_HEADING_PART1 + dateTime + BatchPolicingConstants.SUMMARY_HEADING_PART2;
+        htmlBuilder.append("<table><tr><td colspan='4' style='text-align: center; font-weight: bold; background-color: #BFBFBF;'>")
+                   .append(fullHeader).append("</td></tr>");
+
+        // Table Header with nowrap styling
+        htmlBuilder.append("<tr>");
+        htmlBuilder.append("<th>").append(BatchPolicingConstants.HEADER0).append("</th>");
+        htmlBuilder.append("<th>").append(BatchPolicingConstants.HEADER1).append("</th>");
+        htmlBuilder.append("<th>").append(BatchPolicingConstants.HEADER2).append("</th>");
+        htmlBuilder.append("<th style='width: 50px;'>").append(BatchPolicingConstants.HEADER3).append("</th>"); // Fixed width for symbol
+        htmlBuilder.append("</tr>");
+
+        // Populating Table Data
+        for (BatchPolicingReport message : summaryReport.getMessages()) {
+            MessageType msgType = message.getMsgType();
+            String messageData = message.getData();
+
+            htmlBuilder.append("<tr>");
+
+            if (msgType.equals(MessageType.ERROR_SYMBOL) || msgType.equals(MessageType.WARN_SYMBOL)) {
+                setHtmlSymbolAndDescription(htmlBuilder, msgType, messageData, inputFilesDict);
+            } else if (msgType.equals(MessageType.SUMMARY)) {
+                htmlBuilder.append("<td></td>");
+                htmlBuilder.append("<td style='font-weight: bold;'>").append(messageData).append("</td>");
+                htmlBuilder.append("<td></td><td></td>");
+            }
+            htmlBuilder.append("</tr>");
+        }
+
+        // Footer Row
+        htmlBuilder.append("<tr><td></td><td style='font-weight: bold; background-color: #BFBFBF;'>")
+                   .append(BatchPolicingConstants.TOTAL_FILES_PROCESSED)
+                   .append(reports.size() - 1)
+                   .append("</td><td></td><td></td></tr>");
+
+        // Closing Tags
+        htmlBuilder.append("</table></body></html>");
+
+        return htmlBuilder.toString();
+    }
+
+    public static void setHtmlSymbolAndDescription(
+        StringBuilder htmlBuilder,
+        MessageType msgType,
+        String messageData,
+        Dictionary<String, String> inputFilesDict
+    ) {
+        String symbol;
+        String exceptionColor;
+
+        if (msgType.equals(MessageType.ERROR_SYMBOL)) {
+            exceptionColor = "red";
+            symbol = "&#10060;";
+        } else if (msgType.equals(MessageType.WARN_SYMBOL)) {
+            exceptionColor = "orange";
+            symbol = "<span style='color: rgb(235,134,52); font-family: Segoe UI Emoji;'>&#9888;</span>";
+        } else {
+            exceptionColor = "green";
+            symbol = "&#x2705;";
+        }
+
+        String baseName = messageData.substring(1, messageData.lastIndexOf(BatchPolicingConstants.STR_PERIOD));
+        String extension = messageData.substring(messageData.lastIndexOf(BatchPolicingConstants.STR_PERIOD));
+        String description = inputFilesDict.get(baseName + extension);
+        String[] parts = description.split(LIQConstants.TILDE);
+
+        String reportName = parts[0];
+        String fileDescription = parts[1];
+
+        htmlBuilder.append("<td>").append(reportName).append("</td>");
+        htmlBuilder.append("<td>").append(messageData.substring(1)).append("</td>");
+        htmlBuilder.append("<td style='width: 50px; color: ").append(exceptionColor).append(";'>").append(symbol).append("</td>");
+        htmlBuilder.append("<td>").append(fileDescription).append("</td>");
+    }
+}
+
+
+
+
+public class BatchPolicingHtmlGenerator {
+
     public static String generateHtml(BatchPolicingReport summaryReport, List<BatchPolicingReport> reports, String dateTime, BatchPolicingUtils utils, Dictionary<String, String> inputFilesDict) {
 
         StringBuilder htmlBuilder = new StringBuilder();
