@@ -1,3 +1,39 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class EmailPreview {
+    public static void main(String[] args) {
+        // Simulated email body (same as your email)
+        String body = "Hello,<br><br>Please find attached Batch Policing Consolidated Exception Report.<br><br>Thanks and Regards,<br>SCF IT TEST";
+
+        // Simulated HTML table (same as your email content)
+        String htmlContent = "<!DOCTYPE html><html><head><title>Test Email</title></head><body>"
+                + "<table border='1' style='border-collapse: collapse; width: 50%; text-align: center;'>"
+                + "<tr><th>Column 1</th><th>Column 2</th></tr>"
+                + "<tr><td>Data 1</td><td>Data 2</td></tr>"
+                + "<tr><td>Data 3</td><td>Data 4</td></tr>"
+                + "</table></body></html>";
+
+        // Combine Body + HTML
+        String fullContent = body + "<br><br>" + htmlContent;
+
+        // Create a Swing UI to display the HTML
+        JFrame frame = new JFrame("Email Preview");
+        frame.setSize(600, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JEditorPane editorPane = new JEditorPane("text/html", fullContent);
+        editorPane.setEditable(false);
+
+        JScrollPane scrollPane = new JScrollPane(editorPane);
+        frame.add(scrollPane, BorderLayout.CENTER);
+
+        frame.setVisible(true);
+    }
+}
+
+
+
 public class BatchPolicingHtmlGenerator {
 
     public static String generateHtml(
