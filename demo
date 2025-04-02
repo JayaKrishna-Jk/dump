@@ -1,3 +1,19 @@
+from ssrai.oauth import retrieve_token
+
+token_url = "https://api-uat.statestr.com/oauth/token"
+params = {
+    "grant_type": "client_credentials",
+    "client_id": rai_client_id,
+    "client_secret": eam_consumer_secret
+}
+
+try:
+    token = retrieve_token(rai_client_id, eam_consumer_secret, token_url, params, {})
+    print("Token retrieved successfully:", token)
+except ValueError as e:
+    print("Token retrieval failed:", e)
+
+
 import javax.swing.*;
 import java.awt.*;
 
