@@ -1,3 +1,23 @@
+import requests
+
+token_url = "https://api-uat.statestr.com/oauth/token"
+headers = {"Accept": "application/json"}
+data = {
+    "grant_type": "client_credentials",
+    "client_id": rai_client_id,
+    "client_secret": eam_consumer_secret
+}
+
+try:
+    response = requests.post(token_url, headers=headers, data=data, proxies={})  # Explicitly setting proxies to {}
+    response.raise_for_status()  # Raise error if request failed
+    print("Token retrieved successfully:", response.json())
+except requests.exceptions.RequestException as e:
+    print("Token retrieval failed:", e)
+
+
+
+
 from ssrai.oauth import retrieve_token
 
 token_url = "https://api-uat.statestr.com/oauth/token"
