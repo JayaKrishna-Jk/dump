@@ -1,3 +1,15 @@
+SELECT dp.name AS UserName, o.name AS OwnedObject
+FROM sys.database_principals dp
+LEFT JOIN sys.objects o ON o.principal_id = dp.principal_id
+WHERE dp.type_desc = 'SQL_USER';
+
+
+Script to re-create the user, in case you need to add it back
+CREATE USER [user_name] FOR LOGIN [login_name];
+
+
+
+
 USE [YourDatabaseName];
 GO
 
