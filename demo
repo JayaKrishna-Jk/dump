@@ -1,3 +1,29 @@
+SELECT dp.name AS DatabaseUserName, dp.type_desc, rp.name AS RoleName
+FROM sys.database_role_members drm
+JOIN sys.database_principals rp ON drm.role_principal_id = rp.principal_id
+JOIN sys.database_principals dp ON drm.member_principal_id = dp.principal_id
+WHERE dp.name = USER_NAME();
+
+
+
+
+SELECT 
+    sp.name AS LoginName,
+    sp.type_desc AS LoginType,
+    slr.name AS ServerRole
+FROM 
+    sys.server_role_members srm
+JOIN 
+    sys.server_principals sp ON srm.member_principal_id = sp.principal_id
+JOIN 
+    sys.server_principals slr ON srm.role_principal_id = slr.principal_id
+WHERE 
+    sp.name = SYSTEM_USER;
+
+
+
+
+
 import requests
 
 token_url = "https://api-uat.statestr.com/oauth/token"
