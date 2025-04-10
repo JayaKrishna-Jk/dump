@@ -1,3 +1,33 @@
+import os
+
+# Set paths
+folder_path = r"C:\Your\IXF\Folder"
+sql_file_path = r"C:\Your\importTraining.sql"
+
+# Step 1: Get actual files from the folder
+actual_files = {f for f in os.listdir(folder_path) if f.endswith(".ixf")}
+
+# Step 2: Read expected file names from the importTraining.sql
+expected_files = set()
+with open(sql_file_path, "r") as file:
+    for line in file:
+        parts = line.strip().split()
+        if len(parts) >= 3 and parts[2].endswith(".ixf"):
+            expected_files.add(parts[2])
+
+# Step 3: Find missing ones
+missing_in_sql = actual_files - expected_files
+
+# Output result
+print("Files present in folder but missing in SQL file:")
+for file in sorted(missing_in_sql):
+    print(file)
+
+
+
+
+
+
 # Set folder path and SQL file path
 $folderPath = "C:\Your\IXF\Folder"
 $sqlFilePath = "C:\Your\importTraining.sql"
