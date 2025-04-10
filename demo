@@ -1,3 +1,24 @@
+# Set folder path and SQL file path
+$folderPath = "C:\Your\IXF\Folder"
+$sqlFilePath = "C:\Your\importTraining.sql"
+
+# Get actual .ixf filenames from folder
+$actualFiles = Get-ChildItem -Path $folderPath -Filter *.ixf | Select-Object -ExpandProperty Name
+
+# Extract expected .ixf filenames from third word in each line
+$expectedFiles = Get-Content $sqlFilePath | ForEach-Object {
+    ($_ -split '\s+')[2]
+} | Where-Object { $_ -like '*.ixf' }
+
+# Find files in folder but not in importTraining.sql
+$missingInSQL = $actualFiles | Where-Object { $_ -notin $expectedFiles }
+
+# Output the missing files
+$missingInSQL
+
+
+
+
 Get-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client"
 
 
