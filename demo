@@ -1,3 +1,7 @@
+Get-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client"
+
+
+
 USE [YourDatabaseName];
 GO
 
